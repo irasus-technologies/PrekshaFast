@@ -5,7 +5,11 @@ import {
   Bookmark,
   SquarePen,
   LayoutGrid,
-  LucideIcon
+  LucideIcon,
+  Home,
+  LineChart,
+  Siren,
+  ClipboardList,
 } from "lucide-react";
 
 type Submenu = {
@@ -34,8 +38,10 @@ export function getMenuList(pathname: string): Group[] {
       menus: [
         {
           href: "/dashboard",
-          label: "Dashboard",
-          icon: LayoutGrid,
+          label: "Home",
+          active: pathname.includes("/dashboard"),
+          icon:   Home,
+
           submenus: []
         }
       ]
@@ -45,28 +51,31 @@ export function getMenuList(pathname: string): Group[] {
       menus: [
         {
           href: "",
-          label: "Posts",
-          icon: SquarePen,
+          label: "Assets",
+          active: pathname.includes("/posts"),
+          icon: LineChart,
           submenus: [
             {
-              href: "/posts",
-              label: "All Posts"
+              href: "/vehicles",
+              label: "Vehicles"
             },
             {
-              href: "/posts/new",
-              label: "New Post"
+              href: "/battery-pack",
+              label: "Battery Packs"
             }
           ]
         },
         {
           href: "/categories",
-          label: "Categories",
-          icon: Bookmark
+          label: "Alerts",
+          active: pathname.includes("/categories"),
+          icon: Siren
         },
         {
           href: "/tags",
-          label: "Tags",
-          icon: Tag
+          label: "reports",
+          active: pathname.includes("/tags"),
+          icon: ClipboardList
         }
       ]
     },
@@ -76,11 +85,13 @@ export function getMenuList(pathname: string): Group[] {
         {
           href: "/users",
           label: "Users",
+          active: pathname.includes("/users"),
           icon: Users
         },
         {
           href: "/account",
-          label: "Account",
+          label: "Settings",
+          active: pathname.includes("/account"),
           icon: Settings
         }
       ]
