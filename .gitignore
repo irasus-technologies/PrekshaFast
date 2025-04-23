@@ -13,3 +13,5 @@ pids
 Thumbs.db
 dist/
 build/
+.venv/
+venv/
