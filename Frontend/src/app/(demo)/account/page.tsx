@@ -10,11 +10,12 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
+import SettingsPage from "@/components/demo/pages/SettingsPage";
 
 export default function AccountPage() {
   return (
     <ContentLayout title="Account">
-      <Breadcrumb>
+      {/* <Breadcrumb>
         <BreadcrumbList>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
@@ -32,8 +33,9 @@ export default function AccountPage() {
             <BreadcrumbPage>Account</BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>
-      </Breadcrumb>
-      <PlaceholderContent />
+      </Breadcrumb> */}
+      {/* <PlaceholderContent /> */}
+      <SettingsPage />
     </ContentLayout>
   );
 }

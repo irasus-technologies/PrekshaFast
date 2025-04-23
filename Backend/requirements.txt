@@ -1,5 +1,6 @@
-fastapi
-uvicorn
+fastapi==0.103.2
+pydantic==1.10.13
+uvicorn==0.23.2
 httpx
 python-dotenv
 python-multipart
