@@ -61,7 +61,7 @@ export function Menu({ isOpen }: MenuProps) {
                               variant={
                                 (active === undefined &&
                                   pathname.startsWith(href)) ||
-                                active
+                                  active
                                   ? "secondary"
                                   : "ghost"
                               }
@@ -118,7 +118,7 @@ export function Menu({ isOpen }: MenuProps) {
               <Tooltip delayDuration={100}>
                 <TooltipTrigger asChild>
                   <Button
-                    onClick={() => {}}
+                    onClick={() => { }}
                     variant="outline"
                     className="w-full justify-center h-10 mt-5"
                   >

@@ -2,21 +2,21 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { ChevronDown, Dot, LucideIcon } from "lucide-react";
+import { ChevronDown, LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { DropdownMenuArrow } from "@radix-ui/react-dropdown-menu";
 import {
   Collapsible,
   CollapsibleContent,
-  CollapsibleTrigger
+  CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
-  TooltipProvider
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import {
   DropdownMenu,
@@ -24,13 +24,14 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
   DropdownMenuContent,
-  DropdownMenuSeparator
+  DropdownMenuSeparator,
+  DropdownMenuArrow,
 } from "@/components/ui/dropdown-menu";
-import { usePathname } from "next/navigation";
 
 type Submenu = {
   href: string;
   label: string;
+  icon: LucideIcon;
   active?: boolean;
 };
 
@@ -47,7 +48,7 @@ export function CollapseMenuButton({
   label,
   active,
   submenus,
-  isOpen
+  isOpen,
 }: CollapseMenuButtonProps) {
   const pathname = usePathname();
   const isSubmenuActive = submenus.some((submenu) =>
@@ -101,8 +102,9 @@ export function CollapseMenuButton({
           </div>
         </Button>
       </CollapsibleTrigger>
+
       <CollapsibleContent className="overflow-hidden data-[state=closed]:animate-collapsible-up data-[state=open]:animate-collapsible-down">
-        {submenus.map(({ href, label, active }, index) => (
+        {submenus.map(({ href, label, icon: SubIcon, active }, index) => (
           <Button
             key={index}
             variant={
@@ -115,7 +117,7 @@ export function CollapseMenuButton({
           >
             <Link href={href}>
               <span className="mr-4 ml-2">
-                <Dot size={18} />
+                <SubIcon size={16} />
               </span>
               <p
                 className={cn(
@@ -165,21 +167,25 @@ export function CollapseMenuButton({
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
+
       <DropdownMenuContent side="right" sideOffset={25} align="start">
         <DropdownMenuLabel className="max-w-[190px] truncate">
           {label}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
-        {submenus.map(({ href, label, active }, index) => (
+
+        {submenus.map(({ href, label, icon: SubIcon, active }, index) => (
           <DropdownMenuItem key={index} asChild>
             <Link
-              className={`cursor-pointer ${
+              href={href}
+              className={cn(
+                "flex items-center space-x-2 max-w-[180px] truncate",
                 ((active === undefined && pathname === href) || active) &&
                 "bg-secondary"
-              }`}
-              href={href}
+              )}
             >
-              <p className="max-w-[180px] truncate">{label}</p>
+              <SubIcon size={16} className="shrink-0" />
+              <p className="truncate">{label}</p>
             </Link>
           </DropdownMenuItem>
         ))}

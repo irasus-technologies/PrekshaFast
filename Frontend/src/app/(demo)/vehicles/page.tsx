@@ -1,17 +1,7 @@
 "use client";
 
-import Link from "next/link";
-import { ContentLayout } from "@/components/admin-panel/content-layout";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList,
-    BreadcrumbPage,
-    BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
 import { ColumnDef } from "@tanstack/react-table";
-import { DataTable } from "@/components/demo/tables/DataTable";
+import { AssetTablePage } from "@/components/demo/pages/AssetTablePage";
 
 interface Vehicle {
     asset_tag: string;
@@ -67,6 +57,97 @@ const demoVehicles: Vehicle[] = [
         last_checkin: null,
         last_checkout: "2024-04-18",
     },
+    {
+        asset_tag: "VH-1004",
+        category_name: "Hatchback",
+        company: "Hyundai",
+        model: "i20",
+        serial: "SN-11223",
+        status_label: "Available",
+        created_at: "2024-01-20",
+        updated_at: "2024-04-01",
+        vehicle_registration_number: "FL-1111",
+        last_checkin: "2024-04-01",
+        last_checkout: "2024-03-25",
+    },
+    {
+        asset_tag: "VH-1005",
+        category_name: "Electric",
+        company: "Tesla",
+        model: "Model 3",
+        serial: "SN-33445",
+        status_label: "Charging",
+        created_at: "2023-12-10",
+        updated_at: "2024-04-11",
+        vehicle_registration_number: "NV-9999",
+        last_checkin: "2024-04-10",
+        last_checkout: "2024-03-30",
+    },
+    {
+        asset_tag: "VH-1006",
+        category_name: "SUV",
+        company: "Kia",
+        model: "Seltos",
+        serial: "SN-55667",
+        status_label: "Available",
+        created_at: "2023-10-01",
+        updated_at: "2024-02-15",
+        vehicle_registration_number: "TX-2222",
+        last_checkin: "2024-02-14",
+        last_checkout: "2024-02-01",
+    },
+    {
+        asset_tag: "VH-1007",
+        category_name: "Pickup",
+        company: "Chevrolet",
+        model: "Colorado",
+        serial: "SN-99887",
+        status_label: "Available",
+        created_at: "2024-03-10",
+        updated_at: "2024-04-09",
+        vehicle_registration_number: "AZ-7788",
+        last_checkin: "2024-04-09",
+        last_checkout: "2024-03-25",
+    },
+    {
+        asset_tag: "VH-1008",
+        category_name: "Sedan",
+        company: "Nissan",
+        model: "Altima",
+        serial: "SN-44556",
+        status_label: "In Maintenance",
+        created_at: "2023-09-12",
+        updated_at: "2024-04-12",
+        vehicle_registration_number: "IL-2233",
+        last_checkin: "2024-04-11",
+        last_checkout: "2024-03-28",
+    },
+    {
+        asset_tag: "VH-1009",
+        category_name: "Van",
+        company: "Mercedes",
+        model: "Sprinter",
+        serial: "SN-77441",
+        status_label: "Checked Out",
+        created_at: "2024-01-05",
+        updated_at: "2024-04-08",
+        vehicle_registration_number: "WA-8877",
+        last_checkin: null,
+        last_checkout: "2024-04-07",
+    },
+    {
+        asset_tag: "VH-1010",
+        category_name: "Electric",
+        company: "Rivian",
+        model: "R1T",
+        serial: "SN-66889",
+        status_label: "Available",
+        created_at: "2024-02-18",
+        updated_at: "2024-04-13",
+        vehicle_registration_number: "CO-3344",
+        last_checkin: "2024-04-13",
+        last_checkout: "2024-03-29",
+    },
 ];
 
 const vehiclesColumns: ColumnDef<Vehicle>[] = [
@@ -85,42 +166,29 @@ const vehiclesColumns: ColumnDef<Vehicle>[] = [
 
 export default function VehiclesDemoPage() {
     return (
-        <ContentLayout title="Vehicles">
-            <Breadcrumb>
-                <BreadcrumbList>
-                    <BreadcrumbItem>
-                        <BreadcrumbLink asChild>
-                            <Link href="/dashboard">Dashboard</Link>
-                        </BreadcrumbLink>
-                    </BreadcrumbItem>
-                    <BreadcrumbSeparator />
-                    <BreadcrumbItem>
-                        <BreadcrumbPage>Vehicles</BreadcrumbPage>
-                    </BreadcrumbItem>
-                </BreadcrumbList>
-            </Breadcrumb>
-
-            <div className="max-w-7xl mx-auto py-8">
-                <h1 className="text-2xl font-bold mb-4">Vehicles</h1>
-
-                <DataTable
-                    columns={vehiclesColumns}
-                    data={demoVehicles}
-                    loading={false}
-                    enableSearch
-                    enableMultiSelect
-                    enableColumnToggle
-                    enableRowActions
-                    visibleCols={[
-                        "asset_tag",
-                        "category_name",
-                        "company",
-                        "model",
-                        "serial",
-                        "status_label",
-                    ]}
-                />
-            </div>
-        </ContentLayout>
+        <AssetTablePage
+            title="Vehicles"
+            header="Vehicle Management"
+            subtitle="Monitor and control vehicle assets efficiently"
+            columns={vehiclesColumns}
+            data={demoVehicles}
+            visibleCols={[
+                "asset_tag",
+                "category_name",
+                "company",
+                "model",
+                "serial",
+                "status_label",
+            ]}
+            breadcrumbs={[
+                { label: "Dashboard", href: "/dashboard" },
+                { label: "Vehicles" },
+            ]}
+            bulkActions={[
+                { label: "Bulk Create", href: "/vehicles/bulk-create" },
+                { label: "Bulk Edit", href: "/vehicles/bulk-edit" },
+            ]}
+            clickableColumns={["asset_tag", "company"]}
+        />
     );
 }

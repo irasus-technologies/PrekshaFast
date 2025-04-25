@@ -1,5 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowUp, ArrowDown } from "lucide-react";
+import { cn } from "@/lib/utils";
+
 import {
     useReactTable,
     ColumnDef,
@@ -32,6 +34,7 @@ interface TableProps<TData> {
     enableColumnToggle?: boolean;
     enableRowActions?: boolean;
     visibleCols?: string[];
+    clickableColumns?: string[];
 }
 
 export function DataTable<TData>({
@@ -42,6 +45,7 @@ export function DataTable<TData>({
     enableColumnToggle = false,
     enableRowActions = false,
     visibleCols,
+    clickableColumns,
     loading = false,
 }: TableProps<TData>) {
     const [search, setSearch] = useState("");
@@ -73,7 +77,7 @@ export function DataTable<TData>({
         );
     }, [data, search, columns]);
 
-    console.log(filteredData)
+
     // Set default column visibility based on `visibleCols` prop
     useEffect(() => {
         if (visibleCols) {
@@ -133,7 +137,7 @@ export function DataTable<TData>({
             selectAllRef.current.indeterminate = isSomeSelected;
         }
     }, [selectedRows, table]);
-
+    console.log(selectedRows)
     return (
         <div>
             {enableSearch && (
@@ -145,40 +149,41 @@ export function DataTable<TData>({
                     />
                 </div>
             )}
+            <div className="flex justify-end items-center mb-2">
+                {enableColumnToggle && (
+                    <Dialog>
+                        <DialogTrigger asChild className="items-end ">
+                            <Button className="bg-foreground text-white">Toggle Columns</Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                            <DialogHeader>
+                                <DialogTitle>Toggle Column Visibility</DialogTitle>
+                                <DialogDescription>
+                                    Select the columns you want to show or hide.
+                                </DialogDescription>
+                            </DialogHeader>
+                            <div className="space-y-4">
+                                {table.getAllColumns().map((column) => (
+                                    <div key={column.id}>
+                                        <label className="flex items-center space-x-2">
+                                            <input
+                                                type="checkbox"
+                                                className="checkbox"
+                                                checked={column.getIsVisible()}
+                                                onChange={column.getToggleVisibilityHandler()}
+                                            />
+                                            <span>{column.id}</span>
+                                        </label>
+                                    </div>
+                                ))}
+                            </div>
+                        </DialogContent>
+                    </Dialog>
+                )}
+            </div>
 
-            {enableColumnToggle && (
-                <Dialog>
-                    <DialogTrigger asChild>
-                        <Button className="bg-blue-500 text-white">Toggle Columns</Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                        <DialogHeader>
-                            <DialogTitle>Toggle Column Visibility</DialogTitle>
-                            <DialogDescription>
-                                Select the columns you want to show or hide.
-                            </DialogDescription>
-                        </DialogHeader>
-                        <div className="space-y-4">
-                            {table.getAllColumns().map((column) => (
-                                <div key={column.id}>
-                                    <label className="flex items-center space-x-2">
-                                        <input
-                                            type="checkbox"
-                                            className="checkbox"
-                                            checked={column.getIsVisible()}
-                                            onChange={column.getToggleVisibilityHandler()}
-                                        />
-                                        <span>{column.id}</span>
-                                    </label>
-                                </div>
-                            ))}
-                        </div>
-                    </DialogContent>
-                </Dialog>
-            )}
-
-            <Table className="border border-[#D8D8D8] rounded-md bg-white">
-                <TableHeader className="bg-background hover:bg-gray-900">
+            <Table className="border border-[#D8D8D8] rounded-md">
+                <TableHeader className="bg-foreground">
                     {table.getHeaderGroups().map((headerGroup) => (
                         <TableRow key={headerGroup.id}>
                             {enableMultiSelect && (
@@ -199,15 +204,15 @@ export function DataTable<TData>({
                                     {flexRender(header.column.columnDef.header, header.getContext())}
                                     <span className="ml-2">
                                         <ArrowUp
-                                            className={`inline-block w-3 h-3 ${header.column.getIsSorted() === "asc" ? "text-black" : "text-gray-300"}`}
+                                            className={`inline-block w-3 h-3 ${header.column.getIsSorted() === "asc" ? "text-white" : "text-gray-500"}`}
                                         />
                                         <ArrowDown
-                                            className={`inline-block w-3 h-3 ${header.column.getIsSorted() === "desc" ? "text-black" : "text-gray-300"}`}
+                                            className={`inline-block w-3 h-3 ${header.column.getIsSorted() === "desc" ? "text-white" : "text-gray-500"}`}
                                         />
                                     </span>
                                 </TableHead>
                             ))}
-                            {enableRowActions && <TableHead className="sticky right-0 z-10 ">Actions</TableHead>}
+                            {enableRowActions && <TableHead className="sticky right-0 z-10 text-white ">Actions</TableHead>}
                         </TableRow>
                     ))}
                 </TableHeader>
@@ -229,11 +234,23 @@ export function DataTable<TData>({
                                         />
                                     </TableCell>
                                 )}
-                                {row.getVisibleCells().map((cell) => (
-                                    <TableCell key={cell.id}>
-                                        {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                                    </TableCell>
-                                ))}
+                                {row.getVisibleCells().map((cell) => {
+                                    const isClickable = clickableColumns?.includes(cell.column.id);
+                                    return (
+                                        <TableCell
+                                            key={cell.id}
+                                            className={cn(isClickable && "cursor-pointer hover:text-tablehead hover:underline")}
+                                            onClick={() => {
+                                                if (isClickable) {
+                                                    console.log("Clicked column:", cell.column.id);
+                                                    console.log("Row data:", row.original);
+                                                }
+                                            }}
+                                        >
+                                            {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                                        </TableCell>
+                                    );
+                                })}
                                 {enableRowActions && (
                                     <TableCell className="sticky right-0 z-10 bg-white">
                                         <DropdownMenu>
@@ -241,10 +258,10 @@ export function DataTable<TData>({
                                                 <Button>...</Button>
                                             </DropdownMenuTrigger>
                                             <DropdownMenuContent>
-                                                <DropdownMenuItem onClick={() => console.log("Edit", row.id)}>
+                                                <DropdownMenuItem onClick={() => console.log("Edit", row.original)}>
                                                     Edit
                                                 </DropdownMenuItem>
-                                                <DropdownMenuItem onClick={() => console.log("Delete", row.id)}>
+                                                <DropdownMenuItem onClick={() => console.log("Delete", row.original)}>
                                                     Delete
                                                 </DropdownMenuItem>
                                             </DropdownMenuContent>

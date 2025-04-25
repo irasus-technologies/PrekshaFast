@@ -6,7 +6,7 @@ import { PanelsTopLeft } from "lucide-react";
 import { ArrowRightIcon, GitHubLogoIcon } from "@radix-ui/react-icons";
 
 import { Button } from "@/components/ui/button";
-import { ModeToggle } from "@/components/mode-toggle";
+import { ModeToggle } from "@/components/common/mode-toggle";
 import { useUser } from "@/lib/useUser";
 import { useRouter } from "next/navigation";
 import { useEffect } from 'react';
