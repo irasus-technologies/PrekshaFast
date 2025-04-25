@@ -1,4 +1,4 @@
-#!/home/vishesh/git/shadcn-ui-sidebar/Backend/venv/bin/python3
+#!/home/chanakya-irasus/irasus/fastapi/PrekshaFast/Backend/venv/bin/python3
 # -*- coding: utf-8 -*-
 import re
 import sys
